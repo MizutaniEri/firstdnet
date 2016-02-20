@@ -15,12 +15,12 @@ namespace firstdnet
         /// <param name="fileList">ファイルリスト</param>
         /// <param name="fileName">もととなるファイル</param>
         /// <returns></returns>
-        public static string GetNextFile(List<string> fileList, string fileName)
+        public static string GetNextFile(List<string> fileList, string fileName, int beforeNext = 1)
         {
             var res = fileList.FindIndex(file =>
                 file == fileName
-            ) + 1;
-            if (res < fileList.Count)
+            ) + beforeNext;
+            if (res < fileList.Count && res >= 0)
             {
                 return(fileList[res]);
             }

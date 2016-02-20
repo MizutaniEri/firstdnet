@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using DSInterfaces;
 using Utility;
@@ -80,6 +81,12 @@ namespace firstdnet
         private ulong ResumePosition;
         private Form workForm;
 
+        public async Task<string> GetNextVideoFile(string nowFile, int befNext)
+        {
+            var list = await FileList.GetFileListAsync(nowFile);
+            return (FileList.GetNextFile(list, nowFile, befNext));
+        }
+
         public VideoForm()
         {
             InitializeComponent();
@@ -90,8 +97,7 @@ namespace firstdnet
             fl = new FormLib(this);
             fl.Complete += async (sender, e) =>
             {
-                var list = await FileList.GetFileListAsync(videoFileName);
-                var nextFile = FileList.GetNextFile(list, videoFileName);
+                var nextFile = await GetNextVideoFile(videoFileName, 1);
                 if (nextFile == string.Empty)
                 {
                     timer1.Stop();
@@ -101,7 +107,7 @@ namespace firstdnet
                 }
                 else
                 {
-                    playVideo(nextFile, false);
+                    noChangeSizeVideoPlay(nextFile);
                 }
             };
             String[] args = System.Environment.GetCommandLineArgs();
@@ -142,6 +148,22 @@ namespace firstdnet
             contextMenuStrip1.Opened += (sender, e) => hideCursorShow();
             muteToolStripMenuItem.Click += (sender, e) => MuteSet();
 
+            nextPlayToolStripMenuItem.Click += async (sender, e) =>
+            {
+                var nextFile = await GetNextVideoFile(videoFileName, 1);
+                if (nextFile != string.Empty)
+                {
+                    noChangeSizeVideoPlay(nextFile);
+                }
+            };
+            beforePlayToolStripMenuItem.Click += async (sender, e) =>
+            {
+                var nextFile = await GetNextVideoFile(videoFileName, -1);
+                if (nextFile != string.Empty)
+                {
+                    noChangeSizeVideoPlay(nextFile);
+                }
+            };
 
             if (args.Length > 1)
             {
@@ -284,7 +306,7 @@ namespace firstdnet
             int newHeight = vHeight;
 
             // ビデオの横幅が画面からはみ出る
-            if ((vWidth > (workWidth - frameSize)) || force == true)
+            if ((vWidth > (workWidth - frameSize)) || force)
             {
                 newWidth = (workWidth - frameSize);
                 newHeight = Convert.ToInt32(Convert.ToDouble((workWidth - frameSize)) * aspectRatio);
@@ -1084,6 +1106,29 @@ namespace firstdnet
             {
                 fl.RunGraph();
             }
+        }
+
+        /// <summary>
+        /// サイズ変更なしでビデオ再生
+        /// </summary>
+        /// <param name="fileName"></param>
+        private void noChangeSizeVideoPlay(string fileName)
+        {
+            bool sizeSave = false;
+            Size clSize = new Size();
+            if (fl.Active)
+            {
+                clSize = ClientSize;
+                sizeSave = true;
+            }
+            stopVideo();
+            playVideo(fileName, false);
+            if (sizeSave)
+            {
+                ClientSize = clSize;
+            }
+            setCenterPosition();
+            TraceDebug.WriteLine("Client Size=(" + ClientSize.Width + "," + ClientSize.Height + ")");
         }
 
         private void openVideoToolStripMenuItem_Click(object sender, EventArgs e)

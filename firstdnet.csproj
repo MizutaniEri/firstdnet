@@ -131,6 +131,7 @@
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="DirFileUty.cs" />
     <Compile Include="DVDSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,6 +139,8 @@
       <DependentUpon>DVDSelectForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Extension.cs" />
+    <Compile Include="FileList.cs" />
+    <Compile Include="strnatcmp.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="DSInterfaces.cs" />
     <Compile Include="VideoForm.cs">
@@ -241,6 +244,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="arrow_back_16xMD.png" />
+    <None Include="arrow_Forward_16xMD.png" />
     <Content Include="Multimedia.ico" />
     <None Include="Resources\StatusAnnotations_Blocked_16xLG_color.png" />
     <None Include="Resources\Template_Application_16xMD.png" />
