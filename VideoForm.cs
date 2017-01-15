@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -39,6 +40,9 @@ namespace firstdnet
 
         [DllImport("kernel32.dll")]
         extern static ExecutionState SetThreadExecutionState(ExecutionState esFlags);
+
+        [DllImport("User32.dll")]
+        private extern static bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
 
         public readonly int SWP_NOSIZE = 0x0001;
         public readonly int SWP_NOMOVE = 0x0002;
@@ -292,6 +296,7 @@ namespace firstdnet
             // ビデオサイズ取得
             int vWidth, vHeight;
             fl.GetVideoSize(out vWidth, out vHeight);
+            Debug.WriteLine("Video size = (" + vWidth + "x" + vHeight + ")");
 
             // スクリーンプライマリワークサイズ取得
             int workWidth = Screen.PrimaryScreen.WorkingArea.Width;
@@ -314,7 +319,7 @@ namespace firstdnet
             var newSize = new Size(newWidth, newHeight);
             this.Size = newSize;
             this.ClientSize = newSize;
-            TraceDebug.WriteLine("Client Size=(" + ClientSize.Width + "," + ClientSize.Height + ")");
+            Debug.WriteLine("Video size = (" + vWidth + " x " + vHeight + ") Client Size=(" + ClientSize.Width + " x " + ClientSize.Height + ")");
         }
 
         /// <summary>
@@ -733,13 +738,17 @@ namespace firstdnet
                 String saveFileName = saveFileDialog1.FileName;
                 savaFileNameStore = saveFileName;
 
-                Stream getBMPStream = null; ;
+                //Stream getBMPStream = null; ;
                 Image snapImage = null;
                 // Bitmapストリームをビデオから取得
                 try
                 {
-                    fl.GetBitmap(out getBMPStream);
-                    snapImage = Image.FromStream(getBMPStream);
+                    //fl.GetBitmap(out getBMPStream);
+                    //snapImage = Image.FromStream(getBMPStream);
+                    var bmp = new Bitmap(this.Width, this.Height);
+                    //キャプチャする
+                    //panel1.DrawToBitmap(bmp, new Rectangle(0, 0, panel1.Width, panel1.Height));
+                    snapImage = CaptureControl(this);
                 }
                 catch { }
                 // BitmapストリームをImage形式に変換
@@ -788,6 +797,21 @@ namespace firstdnet
             }
         }
 
+        /// <summary>
+        /// コントロールのイメージを取得する
+        /// </summary>
+        /// <param name="ctrl">キャプチャするコントロール</param>
+        /// <returns>取得できたイメージ</returns>
+        public Bitmap CaptureControl(Control ctrl)
+        {
+            var img = new Bitmap(ctrl.Width, ctrl.Height);
+            var memg = Graphics.FromImage(img);
+            var dc = memg.GetHdc();
+            PrintWindow(ctrl.Handle, dc, 0);
+            memg.ReleaseHdc(dc);
+            memg.Dispose();
+            return img;
+        }
         public void JpegSaveImage(Image img, ref string fileName, int quality)
         {
             pictureSaveImage(img, ref fileName, "image/jpeg", quality);
@@ -1059,6 +1083,7 @@ namespace firstdnet
         private void stopVideo()
         {
             if (!fl.Active) return;
+            nowVolume = fl.Volume;
             fl.StopGraph();
             fl.Position = 0;
         }
@@ -1318,6 +1343,9 @@ namespace firstdnet
                 stopVideo();
                 fl.CloseInterfaces();
             }
+
+            fl = null;
+            fl = new FormLib(this);
 
             playVideo(videoFileName);
             //if (currVol != -1)

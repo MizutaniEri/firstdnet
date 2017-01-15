@@ -38,12 +38,13 @@
             this.openDVDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playPauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopResumePlayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fastForwardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.skip1min30secMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.rewindToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nextPlayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.beforePlayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nextPlayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.volumeUPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.volumeDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -96,12 +97,13 @@
             this.openDVDToolStripMenuItem,
             this.playPauseToolStripMenuItem,
             this.stopResumePlayToolStripMenuItem,
-            this.stopToolStripMenuItem,
             this.fastForwardToolStripMenuItem,
             this.skip1min30secMenuItem1,
             this.rewindToolStripMenuItem,
-            this.nextPlayToolStripMenuItem,
             this.beforePlayToolStripMenuItem,
+            this.nextPlayToolStripMenuItem,
+            this.toolStripSeparator6,
+            this.stopToolStripMenuItem,
             this.toolStripSeparator2,
             this.volumeUPToolStripMenuItem,
             this.volumeDownToolStripMenuItem,
@@ -123,7 +125,7 @@
             this.closeToolStripMenuItem,
             this.enumFiltersToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(195, 814);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(195, 842);
             this.contextMenuStrip1.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
             // 
             // openVideoToolStripMenuItem
@@ -168,13 +170,6 @@
             this.stopResumePlayToolStripMenuItem.Visible = false;
             this.stopResumePlayToolStripMenuItem.Click += new System.EventHandler(this.stopResumePlayToolStripMenuItem_Click);
             // 
-            // stopToolStripMenuItem
-            // 
-            this.stopToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("stopToolStripMenuItem.Image")));
-            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
-            this.stopToolStripMenuItem.Text = "Stop";
-            // 
             // fastForwardToolStripMenuItem
             // 
             this.fastForwardToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fastForwardToolStripMenuItem.Image")));
@@ -196,6 +191,13 @@
             this.rewindToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
             this.rewindToolStripMenuItem.Text = "Rewind (-30sec)";
             // 
+            // beforePlayToolStripMenuItem
+            // 
+            this.beforePlayToolStripMenuItem.Image = global::firstdnet.Properties.Resources.arrow_back_16xMD;
+            this.beforePlayToolStripMenuItem.Name = "beforePlayToolStripMenuItem";
+            this.beforePlayToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
+            this.beforePlayToolStripMenuItem.Text = "Before Play";
+            // 
             // nextPlayToolStripMenuItem
             // 
             this.nextPlayToolStripMenuItem.Image = global::firstdnet.Properties.Resources.arrow_Forward_16xMD;
@@ -203,12 +205,17 @@
             this.nextPlayToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
             this.nextPlayToolStripMenuItem.Text = "Next Play";
             // 
-            // beforePlayToolStripMenuItem
+            // toolStripSeparator6
             // 
-            this.beforePlayToolStripMenuItem.Image = global::firstdnet.Properties.Resources.arrow_back_16xMD;
-            this.beforePlayToolStripMenuItem.Name = "beforePlayToolStripMenuItem";
-            this.beforePlayToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
-            this.beforePlayToolStripMenuItem.Text = "Before Play";
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(191, 6);
+            // 
+            // stopToolStripMenuItem
+            // 
+            this.stopToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("stopToolStripMenuItem.Image")));
+            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
+            this.stopToolStripMenuItem.Text = "Stop";
             // 
             // toolStripSeparator2
             // 
@@ -530,6 +537,7 @@
         private System.Windows.Forms.ToolStripMenuItem stopResumePlayToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nextPlayToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem beforePlayToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
     }
 }
 

@@ -58,6 +58,11 @@ namespace firstdnet
                         ext == ".mkv" ||
                         ext == ".avi" ||
                         ext == ".flv" ||
+                        ext == ".m4v" ||
+                        ext == ".aac" ||
+                        ext == ".wav" ||
+                        ext == ".mp3" ||
+                        ext == ".flac" ||
                         ext == ".wmv")
                     {
                         rtc = true;

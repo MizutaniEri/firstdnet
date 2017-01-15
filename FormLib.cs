@@ -447,6 +447,10 @@ namespace firstdnet
                     {
                         videoWidth = 1920;
                     }
+                    if (videoWidth == 1920 && videoHeight == 480)
+                    {
+                        videoHeight = 1200;
+                    }
                     return;
                 }
                 catch { }//オーディオファイルでエラーが出る
