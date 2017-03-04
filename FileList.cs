@@ -58,6 +58,8 @@ namespace firstdnet
                         ext == ".mkv" ||
                         ext == ".avi" ||
                         ext == ".flv" ||
+                        ext == ".ts" ||
+                        ext == ".m2ts" ||
                         ext == ".m4v" ||
                         ext == ".aac" ||
                         ext == ".wav" ||
