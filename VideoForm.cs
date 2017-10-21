@@ -150,19 +150,11 @@ namespace firstdnet
 
             nextPlayToolStripMenuItem.Click += async (sender, e) =>
             {
-                var nextFile = await GetNextVideoFile(videoFileName, 1);
-                if (nextFile != string.Empty)
-                {
-                    noChangeSizeVideoPlay(nextFile);
-                }
+                await nextVideoPlay(1);
             };
             beforePlayToolStripMenuItem.Click += async (sender, e) =>
             {
-                var nextFile = await GetNextVideoFile(videoFileName, -1);
-                if (nextFile != string.Empty)
-                {
-                    noChangeSizeVideoPlay(nextFile);
-                }
+                await nextVideoPlay(-1);
             };
 
             if (args.Length > 1)
@@ -201,6 +193,15 @@ namespace firstdnet
                 }
                 playVideo(fileName, screenSize);
                 setTitleBar();
+            }
+        }
+
+        private async Task nextVideoPlay(int befNext)
+        {
+            var nextFile = await GetNextVideoFile(videoFileName, befNext);
+            if (nextFile != string.Empty)
+            {
+                noChangeSizeVideoPlay(nextFile);
             }
         }
 
@@ -341,7 +342,7 @@ namespace firstdnet
             fl.Volume += volPlus;
         }
 
-        public void Form1_KeyDown(object sender, KeyEventArgs e)
+        public async void Form1_KeyDownAsync(object sender, KeyEventArgs e)
         {
             int x, y;
             int newX, newY;
@@ -481,10 +482,10 @@ namespace firstdnet
                 e.KeyCode == Keys.Enter)
             {
                 //if (!fl.Active) return;
-            if (fl.State == FilterState.Paused)
-            {
-                playOrPause();
-            }
+                if (fl.State == FilterState.Paused)
+                {
+                    playOrPause();
+                }
                 else
                 {
                     MuteOffSet();
@@ -511,6 +512,14 @@ namespace firstdnet
             else if (e.KeyCode == Keys.OemMinus)
             {
                 fl.SpeedDown();
+            }
+            else if (e.KeyCode == Keys.N)
+            {
+                await nextVideoPlay(1);
+            }
+            else if (e.KeyCode == Keys.B)
+            {
+                await nextVideoPlay(-1);
             }
         }
 
@@ -1060,6 +1069,7 @@ namespace firstdnet
         {
             if (!fl.Active) return;
             fl.StopGraph();
+            fl.CloseInterfaces();
             fl.Position = 0;
         }
 
@@ -1703,7 +1713,7 @@ namespace firstdnet
             Controls.Add(workForm);
             workForm.Location = new Point(0, 0);
             workForm.ClientSize = ClientSize;
-            workForm.BackgroundImage = snapImage;   
+            workForm.BackgroundImage = snapImage;
         }
     }
 }

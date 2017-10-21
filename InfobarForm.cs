@@ -42,7 +42,7 @@ namespace firstdnet
 
         private void Form2_KeyDown(object sender, KeyEventArgs e)
         {
-            mainForm.Form1_KeyDown(sender, e);
+            mainForm.Form1_KeyDownAsync(sender, e);
         }
 
         private void Form2_MouseDown(object sender, MouseEventArgs e)

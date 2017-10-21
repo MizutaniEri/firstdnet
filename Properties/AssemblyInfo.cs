@@ -11,7 +11,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Project Eri.")]
 [assembly: AssemblyProduct("firstdnet")]
-[assembly: AssemblyCopyright("Copyright © 2011-2015. Mizutani.Eri")]
+[assembly: AssemblyCopyright("Copyright © 2011-2017. Mizutani.Eri")]
 [assembly: AssemblyTrademark("Trademark Mizutani.Eri")]
 [assembly: AssemblyCulture("")]
 
