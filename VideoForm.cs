@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Capture;
 using DSInterfaces;
 using Utility;
 
@@ -36,6 +37,9 @@ namespace firstdnet
         [DllImport("user32.dll")]
         public static extern bool SetWindowPos(IntPtr hWnd, int hWndInsertAfter,
             int X, int Y, int cx, int cy, uint uFlags);
+
+        [DllImport("User32.dll")]
+        private extern static bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
 
         [DllImport("kernel32.dll")]
         extern static ExecutionState SetThreadExecutionState(ExecutionState esFlags);
@@ -100,10 +104,16 @@ namespace firstdnet
                 var nextFile = await GetNextVideoFile(videoFileName, 1);
                 if (nextFile == string.Empty)
                 {
-                    timer1.Stop();
-                    fl.PauseGraph();
-                    fl.StopGraph();
-                    Close();
+                    try
+                    {
+                        timer1.Stop();
+                        fl.PauseGraph();
+                        fl.StopGraph();
+                    }
+                    finally
+                    {
+                        Close();
+                    }
                 }
                 else
                 {
@@ -253,36 +263,40 @@ namespace firstdnet
         {
             bool isAudio, isVideo;
             long audioLength;
-            fl.GetMediaContents(videoFile, out isVideo, out isAudio, out audioLength);
-            //fl.BuildGraph(panel1.Handle, videoFile, isVideo);
-            panel1.Visible = false;
-            fl.BuildGraph(Handle, videoFile, isVideo);
-            fl.RunGraph();
-            // タイマーイベント登録
-            timer1.Tick += (sender, e) =>
+            try
             {
+                fl.GetMediaContents(videoFile, out isVideo, out isAudio, out audioLength);
+                //fl.BuildGraph(panel1.Handle, videoFile, isVideo);
+                panel1.Visible = false;
+                fl.BuildGraph(Handle, videoFile, isVideo);
+                fl.RunGraph();
+                // タイマーイベント登録
+                timer1.Tick += (sender, e) =>
+                {
                 // 動画再生中にスリープさせないためのシステムへの通知を行う
                 if (WindowState != FormWindowState.Minimized &&
-                    fl.State == FilterState.Running)
+                        fl.State == FilterState.Running)
+                    {
+                        SetThreadExecutionState(ExecutionState.DisplayRequired);
+                    }
+                    setTitleBar();
+                };
+                // タイマー起動
+                timer1.Start();
+                if (hideMouse)
                 {
-                    SetThreadExecutionState(ExecutionState.DisplayRequired);
+                    TraceDebug.WriteLine("play video -> cursor show");
+                    System.Windows.Forms.Cursor.Show();
+                    hideMouse = false;
                 }
-                setTitleBar();
-            };
-            // タイマー起動
-            timer1.Start();
-            if (hideMouse)
-            {
-                TraceDebug.WriteLine("play video -> cursor show");
-                System.Windows.Forms.Cursor.Show();
-                hideMouse = false;
+
+                videoFileName = videoFile;
+
+                fl.Volume = initVolume;
+                setVideoSize2ClientSize(forceScreenSize);
+                setCenterPosition();
             }
-
-            videoFileName = videoFile;
-
-            fl.Volume = initVolume;
-            setVideoSize2ClientSize(forceScreenSize);
-            setCenterPosition();
+            catch { }
         }
 
         /// <summary>
@@ -323,7 +337,7 @@ namespace firstdnet
         /// </summary>
         private void playOrPause()
         {
-            if (!fl.Active) return;
+            // 再生中なら一時停止
             if (fl.State == FilterState.Running)
             {
                 MuteSet(true);
@@ -332,7 +346,16 @@ namespace firstdnet
             else
             {
                 MuteSet(false);
-                fl.RunGraph();
+                // 一時停止中なら再開
+                if (fl.State == FilterState.Paused)
+                {
+                    fl.RunGraph();
+                }
+                // それ以外なら(停止中なら)再生
+                else
+                {
+                    playVideo(videoFileName);
+                }
             }
         }
 
@@ -397,7 +420,15 @@ namespace firstdnet
             // W Key -> Rewind
             else if (e.KeyCode == Keys.W)
             {
-                fl.Position -= convSecondToUlong(5.0);
+                ulong val = convSecondToUlong(5.0);
+                if ((fl.Position - val) < 0)
+                {
+                    fl.Position = 0;
+                }
+                else
+                {
+                    fl.Position -= val;
+                }
             }
             else if (e.KeyCode == Keys.I)
             {
@@ -406,7 +437,15 @@ namespace firstdnet
             // J Key -> Most rewind
             else if (e.KeyCode == Keys.J)
             {
-                fl.Position -= convSecondToUlong(15.0);
+                ulong val = convSecondToUlong(15.0);
+                if ((fl.Position - val) < 0)
+                {
+                    fl.Position = 0;
+                }
+                else
+                {
+                    fl.Position -= val;
+                }
             }
             // K key -> Most fast forward
             else if (e.KeyCode == Keys.K)
@@ -434,7 +473,15 @@ namespace firstdnet
             // , Key -> コマ戻し
             else if (e.KeyCode == Keys.Oemcomma)
             {
-                fl.Position -= convSecondToUlong(0.03);
+                ulong val = convSecondToUlong(0.03);
+                if ((fl.Position - val) < 0)
+                {
+                    fl.Position = 0;
+                }
+                else
+                {
+                    fl.Position -= val;
+                }
             }
             // Alt+Enter -> フルスクリーン切り替え
             // Ctrl+Enter -> フルスクリーン切り替え
@@ -669,6 +716,25 @@ namespace firstdnet
         }
 
         /// <summary>
+        /// コントロールのイメージを取得する
+        /// </summary>
+        /// <param name="ctrl">キャプチャするコントロール</param>
+        /// <returns>取得できたイメージ</returns>
+        public Bitmap CaptureScreen()
+        {
+            //Bitmapの作成
+            Bitmap bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width,
+                Screen.PrimaryScreen.Bounds.Height);
+            //Graphicsの作成
+            Graphics g = Graphics.FromImage(bmp);
+            //画面全体をコピーする
+            g.CopyFromScreen(new Point(0, 0), new Point(0, 0), bmp.Size);
+            //解放
+            g.Dispose();
+            return bmp;
+        }
+
+        /// <summary>
         /// JPEG/PSP THM File Making
         /// </summary>
         /// <param name="sender"></param>
@@ -742,13 +808,18 @@ namespace firstdnet
                 String saveFileName = saveFileDialog1.FileName;
                 savaFileNameStore = saveFileName;
 
-                Stream getBMPStream = null; ;
+                //Stream getBMPStream = null; ;
                 Image snapImage = null;
                 // Bitmapストリームをビデオから取得
                 try
                 {
-                    fl.GetBitmap(out getBMPStream);
-                    snapImage = Image.FromStream(getBMPStream);
+                    // Windows8付近から、下記の方法はアプリエラーで落ちるようになってしまった
+                    //fl.GetBitmap(out getBMPStream);
+                    //snapImage = Image.FromStream(getBMPStream);
+                    //なので、無難な、キャプチャによる画像保存を行う
+                    // Sleepしないと、残像がキャプチャされてしまう
+                    Thread.Sleep(500);
+                    snapImage = CaptureGraphics.CaptureScreen(ClientSize.Width, ClientSize.Height);
                 }
                 catch { }
                 // BitmapストリームをImage形式に変換
@@ -1068,9 +1139,13 @@ namespace firstdnet
         private void stopVideo()
         {
             if (!fl.Active) return;
-            fl.StopGraph();
-            fl.CloseInterfaces();
-            fl.Position = 0;
+            try
+            {
+                fl.StopGraph();
+                fl.CloseInterfaces();
+                fl.Position = 0;
+            }
+            catch { }
         }
 
         private void openVideoFile()
@@ -1311,39 +1386,42 @@ namespace firstdnet
             bool pauseFlg = false;
             Size clSize = ClientSize;
             Point loc = Location;
-
-            if (fl.State == FilterState.Running)
+            try
             {
-                fl.PauseGraph();
-                pauseFlg = true;
+                if (fl.State == FilterState.Running)
+                {
+                    fl.PauseGraph();
+                    pauseFlg = true;
+                }
+
+                hideCursorShow();
+
+                ulong videoPosition = fl.Position;
+                //int currVol = fl.Volume;
+
+                if (fl.State != FilterState.Stopped)
+                {
+                    stopVideo();
+                    fl.CloseInterfaces();
+                }
+
+                playVideo(videoFileName);
+                //if (currVol != -1)
+                //{
+                //    fl.Volume = currVol;
+                fl.Volume = 80 ;
+                //}
+                ClientSize = clSize;
+                TraceDebug.WriteLine("Client Size=(" + ClientSize.Width + "," + ClientSize.Height + ")");
+                Location = loc;
+                if (pauseFlg == true)
+                {
+                    fl.RunGraph();
+                }
+                fl.Position = videoPosition;
+                mouseTimer.Enabled = true;
             }
-
-            hideCursorShow();
-
-            ulong videoPosition = fl.Position;
-            //int currVol = fl.Volume;
-
-            if (fl.State != FilterState.Stopped)
-            {
-                stopVideo();
-                fl.CloseInterfaces();
-            }
-
-            playVideo(videoFileName);
-            //if (currVol != -1)
-            //{
-            //    fl.Volume = currVol;
-            fl.Volume = 80;
-            //}
-            ClientSize = clSize;
-            TraceDebug.WriteLine("Client Size=(" + ClientSize.Width + "," + ClientSize.Height + ")");
-            Location = loc;
-            if (pauseFlg == true)
-            {
-                fl.RunGraph();
-            }
-            fl.Position = videoPosition;
-            mouseTimer.Enabled = true;
+            catch { }
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
