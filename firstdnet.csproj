@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>firstdnet</RootNamespace>
     <AssemblyName>firstdnet</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -98,6 +98,7 @@
     <CodeAnalysisFailOnMissingRules>true</CodeAnalysisFailOnMissingRules>
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug x64|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -131,6 +132,7 @@
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Capture.cs" />
     <Compile Include="DirFileUty.cs" />
     <Compile Include="DVDSelectForm.cs">
       <SubType>Form</SubType>
@@ -154,6 +156,12 @@
     </Compile>
     <Compile Include="InfobarForm.Designer.cs">
       <DependentUpon>InfobarForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VideoList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VideoList.Designer.cs">
+      <DependentUpon>VideoList.cs</DependentUpon>
     </Compile>
     <Compile Include="ZoomInputForm.cs">
       <SubType>Form</SubType>
@@ -188,6 +196,9 @@
     <EmbeddedResource Include="InfobarForm.resx">
       <DependentUpon>InfobarForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="VideoList.resx">
+      <DependentUpon>VideoList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ZoomInputForm.resx">
       <DependentUpon>ZoomInputForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -208,6 +219,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -254,7 +266,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" C:\User\Tools\$(TargetName)_$(PlatformName).exe</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" D:\User\Tools\$(TargetName)_$(PlatformName).exe</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

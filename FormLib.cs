@@ -443,13 +443,14 @@ namespace firstdnet
                     EVRCtrl.GetNativeVideoSize(out s1, out s2);
                     videoWidth = s1.Width;
                     videoHeight = s1.Height;
+                    Console.WriteLine("Width:" + videoWidth + " Height:" + videoHeight);
                     if (videoWidth == 1440 && (videoHeight == 1080 || videoHeight == 1088))
                     {
                         videoWidth = 1920;
                     }
-                    if (videoWidth == 1920 && videoHeight == 480)
+                    if (/*videoWidth == 3840 && */(videoHeight == 2160))
                     {
-                        videoHeight = 1200;
+                        videoWidth = 3840;
                     }
                     return;
                 }

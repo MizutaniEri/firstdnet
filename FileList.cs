@@ -9,6 +9,8 @@ namespace firstdnet
 {
     public class FileList
     {
+        static string[] ExtArray = { ".mp4", ".mkv", ".mov", ".flv", ".mpg", ".avi", ".wmv",
+                              ".mp3", ".ac3", ".wav", ".wma", ".flac"};
         /// <summary>
         /// ファイルリスト次ファイル検索
         /// </summary>
@@ -53,19 +55,7 @@ namespace firstdnet
                     // 拡張子の取得
                     string ext = Path.GetExtension(file).ToLower();
                     bool rtc = false;
-                    if (ext == ".mov" ||
-                        ext == ".mp4" ||
-                        ext == ".mkv" ||
-                        ext == ".avi" ||
-                        ext == ".flv" ||
-                        ext == ".ts" ||
-                        ext == ".m2ts" ||
-                        ext == ".m4v" ||
-                        ext == ".aac" ||
-                        ext == ".wav" ||
-                        ext == ".mp3" ||
-                        ext == ".flac" ||
-                        ext == ".wmv")
+                    if (ExtArray.Contains(ext))
                     {
                         rtc = true;
                     }
