@@ -80,6 +80,7 @@
             this.formMoveTimer = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -446,7 +447,7 @@
             this.panel1.ContextMenuStrip = this.contextMenuStrip1;
             this.panel1.Cursor = System.Windows.Forms.Cursors.Default;
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel1.Margin = new System.Windows.Forms.Padding(6);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(615, 527);
             this.panel1.TabIndex = 2;
@@ -461,6 +462,10 @@
             // 
             this.timer2.Tick += new System.EventHandler(this.Timer2_Tick);
             // 
+            // timer3
+            // 
+            this.timer3.Tick += new System.EventHandler(this.Timer3_Tick);
+            // 
             // VideoForm
             // 
             this.AllowDrop = true;
@@ -469,7 +474,7 @@
             this.ClientSize = new System.Drawing.Size(615, 524);
             this.Controls.Add(this.panel1);
             this.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "VideoForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "firstdnet";
@@ -539,6 +544,7 @@
         private System.Windows.Forms.ToolStripMenuItem nextPlayToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem beforePlayToolStripMenuItem;
         private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.Timer timer3;
     }
 }
 

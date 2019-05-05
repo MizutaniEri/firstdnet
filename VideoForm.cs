@@ -84,6 +84,8 @@ namespace firstdnet
         private int nowVolume = 0;
         private ulong ResumePosition;
         private Form workForm;
+        private Size m_clSize;
+        private Point m_windowPosition;
 
         public async Task<string> GetNextVideoFile(string nowFile, int befNext)
         {
@@ -201,7 +203,7 @@ namespace firstdnet
                 {
                     fl.IsEvrPlay = false;
                 }
-                playVideo(fileName, screenSize);
+                playVideo(fileName);
                 setTitleBar();
             }
         }
@@ -259,7 +261,7 @@ namespace firstdnet
         /// </summary>
         /// <param name="videoFile"></param>
         /// <param name="forceScreenSize"></param>
-        private void playVideo(String videoFile, bool forceScreenSize = false)
+        private void playVideo(String videoFile, bool forceScreenSize = true)
         {
             bool isAudio, isVideo;
             long audioLength;
@@ -283,7 +285,14 @@ namespace firstdnet
                 };
                 // タイマー起動
                 timer1.Start();
-                timer2.Start();
+                if (forceScreenSize)
+                {
+                    timer2.Start();
+                }
+                else
+                {
+                    timer3.Start();
+                }
                 if (hideMouse)
                 {
                     TraceDebug.WriteLine("play video -> cursor show");
@@ -1201,17 +1210,19 @@ namespace firstdnet
         private void noChangeSizeVideoPlay(string fileName)
         {
             bool sizeSave = false;
-            Size clSize = new Size();
+            m_clSize = new Size();
+            m_windowPosition = new Point();
             if (fl.Active)
             {
-                clSize = ClientSize;
+                m_clSize = ClientSize;
+                m_windowPosition = Location;
                 sizeSave = true;
             }
             stopVideo();
             playVideo(fileName, false);
             if (sizeSave)
             {
-                ClientSize = clSize;
+                ClientSize = m_clSize;
             }
             setCenterPosition();
             TraceDebug.WriteLine("Client Size=(" + ClientSize.Width + "," + ClientSize.Height + ")");
@@ -1805,6 +1816,13 @@ namespace firstdnet
             timer2.Stop();
             setVideoSize2ClientSize(false);
             setCenterPosition();
+        }
+
+        private void Timer3_Tick(object sender, EventArgs e)
+        {
+            timer3.Stop();
+            ClientSize = m_clSize;
+            Location = m_windowPosition;
         }
     }
 }
