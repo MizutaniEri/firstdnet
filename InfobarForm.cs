@@ -25,7 +25,12 @@ namespace firstdnet
             set
             {
                 label1.Text = value;
-                Height = 16;
+                //Height = 16;
+                var sf = new StringFormat();
+                Bitmap canvas = new Bitmap(label1.Width, label1.Height);
+                Graphics g = Graphics.FromImage(canvas);
+                SizeF stringSize = g.MeasureString(value, this.Font, Width, sf);
+                Height = (int)stringSize.Height;
             }
         }
 
