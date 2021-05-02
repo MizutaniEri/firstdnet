@@ -1470,7 +1470,8 @@ namespace firstdnet
             // No Pause -> Pause
             if (fl.State == FilterState.Running)
             {
-                fl.PauseGraph();
+                //fl.PauseGraph();
+                playOrPause();
                 pauseFlg = true;
             }
 
@@ -1494,7 +1495,7 @@ namespace firstdnet
                         stopVideo();
                         fl.CloseInterfaces();
                         FileInfo fi = new FileInfo(videoFileName.FileRename(renVideo.NewVideoName));
-                        playVideo(fi.FullName);
+                        //playVideo(fi.FullName);
                         videoFileName = fi.FullName;
                         changeClientFormSize(nowZoomScale);
                         fl.Position = currPos;
@@ -1517,7 +1518,8 @@ namespace firstdnet
             // Play -> Pause -> Play
             if (pauseFlg == true && fl.State != FilterState.Running)
             {
-                fl.RunGraph();
+                //fl.RunGraph();
+                playOrPause();
             }
             mouseTimer.Enabled = true;
         }
