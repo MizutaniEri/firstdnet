@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug x64|x64'">
-    <StartArguments>"D:\User\MOVIE\保存\Anime\[1975-2009] World Masterpiece Theater_世界名作劇場_TV.MOVIE\%28第13作%29 [1987] 愛の若草物語\愛の若草物語 第07話｢おば様はいじわる！｣%28DVD 640x480 WMV9%29.wmv"</StartArguments>
+    <StartArguments>
+    </StartArguments>
   </PropertyGroup>
   <PropertyGroup>
     <ProjectView>ShowAllFiles</ProjectView>

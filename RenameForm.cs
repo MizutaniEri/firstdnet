@@ -33,6 +33,8 @@ namespace firstdnet
         {
             oldName.Text = OriginalVideoName;
             newName.Text = OriginalVideoName;
+            newName.SelectionStart = 0;
+            newName.SelectionLength = OriginalVideoName.LastIndexOf(".");
         }
 
         private void OKbutton_Click(object sender, EventArgs e)
