@@ -1179,7 +1179,7 @@ namespace firstdnet
                 nowOpenFilter = "Open File Extension|*" + extStr + "|";
             }
             openFileDialog1.Filter = nowOpenFilter +
-                                     "Movie Files|*.mp4;*.mkv;*.mov;*.flv;*.mpg;*.avi;*.wmv|" +
+                                     "Movie Files|*.mp4;*.mkv;*.mov;*.flv;*.mpg;*.avi;*.wmv;*.ts|" +
                                      "Audio files|*.mp3;*.ac3;*.wav;*.wma|" +
                                      "All Files|*.*";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)

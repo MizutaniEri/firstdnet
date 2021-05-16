@@ -9,7 +9,7 @@ namespace firstdnet
 {
     public class FileList
     {
-        static string[] ExtArray = { ".mp4", ".mkv", ".mov", ".flv", ".mpg", ".avi", ".wmv",
+        static string[] ExtArray = { ".mp4", ".mkv", ".mov", ".flv", ".mpg", ".avi", ".wmv", ".ts",
                               ".mp3", ".ac3", ".wav", ".wma", ".flac"};
         /// <summary>
         /// ファイルリスト次ファイル検索
